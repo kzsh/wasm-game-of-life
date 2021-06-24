@@ -1,5 +1,7 @@
 mod utils;
 
+extern crate js_sys;
+
 use std::fmt;
 use wasm_bindgen::prelude::*;
 
@@ -22,6 +24,10 @@ pub struct Universe {
     width: u32,
     height: u32,
     cells: Vec<Cell>,
+}
+
+pub fn random(lower: u32, upper: u32) -> u32 {
+    ((js_sys::Math::random() + 1.0) * upper as f64) as u32 - lower
 }
 
 #[wasm_bindgen]
@@ -86,7 +92,7 @@ impl Universe {
 
         let cells = (0..width * height)
             .map(|i| {
-                if i % 2 == 0 || i % 7 == 0 {
+                if i % 2 == 0 || i % random(6, 8) == 0 {
                     Cell::Alive
                 } else {
                     Cell::Dead
